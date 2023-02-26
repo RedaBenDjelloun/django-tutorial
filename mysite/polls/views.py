@@ -21,6 +21,8 @@ def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
+        # Small issue to fix later : race condition
+        # Use F() : https://docs.djangoproject.com/en/4.1/ref/models/expressions/#avoiding-race-conditions-using-f
     except (KeyError, Choice.DoesNotExist):
         # Redisplay the question voting form
         return render(request, 'polls/detail.html', {
